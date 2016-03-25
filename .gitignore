@@ -26,3 +26,7 @@ ExportedObj/
 sysinfo.txt
 Glitch/Library/
 Glitch/ProjectSettings/
+Glitch/Assets/Photon Unity Networking/Demos/
+Glitch/Assets/Plugins/PhotonChatApi/
+Glitch/Builds/
+Glitch/obj/
