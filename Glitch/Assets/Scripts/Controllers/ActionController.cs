@@ -4,7 +4,6 @@ using Glitch;
 
 public class ActionController : MonoBehaviour
 {
-
     PhotonView photonView;
     GameObject bullet;
     GameObject[] bulletArray;
@@ -56,7 +55,7 @@ public class ActionController : MonoBehaviour
 
     void fire()
     {
-        Vector3 position = new Vector3(transform.position.x, 1.5f, transform.position.z) + transform.forward + (transform.right * 0.15f);
+        Vector3 position = new Vector3(transform.position.x, 1.5f, transform.position.z) + transform.forward + (transform.right * 0.1f);
 
         PhotonView.RPC("shoot", PhotonTargets.All, position, transform.rotation, colourSerialized);
     }
@@ -65,11 +64,11 @@ public class ActionController : MonoBehaviour
     void shoot(Vector3 position, Quaternion rotation, Vector3 colour)
     {
         GameObject o = Instantiate(bullet, position, rotation) as GameObject;
-        o.GetComponent<Renderer>().material.SetColor("_Color",new Color(colour.x, colour.y, colour.z));
-        o.GetComponent<Renderer>().material.SetColor("_EmissionColor",new Color(colour.x, colour.y, colour.z));
+        o.GetComponent<Renderer>().material.SetColor("_Color", new Color(colour.x, colour.y, colour.z));
+        o.GetComponent<Renderer>().material.SetColor("_EmissionColor", new Color(colour.x, colour.y, colour.z));
         o.GetComponent<Light>().color = new Color(colour.x, colour.y, colour.z);
         o.GetComponent<Rigidbody>().velocity = transform.forward * bulletSpeed;
-        o.GetComponent<Bullet_Basic>().photonView = PhotonView;
+        o.GetComponent<Bullet_Basic>().setPhotonView(PhotonView);
         o.GetComponent<Bullet_Basic>().index = pointer;
         o.GetComponent<Bullet_Basic>().damage = 5;
         bulletArray[pointer] = o;
@@ -83,4 +82,12 @@ public class ActionController : MonoBehaviour
         Destroy(bulletArray[index]);
     }
 
+    [PunRPC]
+    void killConfirmed()
+    {
+        if (PhotonView.isMine)
+        {
+            GetComponent<PlayerController>().Controller.addKill();
+        }
+    }
 }

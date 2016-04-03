@@ -7,6 +7,7 @@ namespace Glitch
     {
         int health;
         GameController controller;
+        Bullet_Basic lastHit;
 
         public int Health
         {
@@ -20,15 +21,10 @@ namespace Glitch
                 health = value;
                 if (health <= 0)
                 {
-                    controller.respawn();
+                    lastHit.GetComponent<Bullet_Basic>().onKill();
                     GetComponent<PhotonView>().RPC("death", PhotonTargets.All);
                 }
             }
-        }
-
-        void Update()
-        {
-
         }
 
         public GameController Controller
@@ -48,14 +44,20 @@ namespace Glitch
         void death()
         {
             Destroy(this.gameObject);
+            if (GetComponent<PhotonView>().isMine)
+            {
+                controller.addDeath();
+                controller.respawn();
+            }
         }
 
         void OnTriggerEnter(Collider collider)
         {
+            //Only trigger if the object is a bullet AND the player belongs to me
             if (collider.gameObject.layer == 10 && GetComponent<PhotonView>().isMine)
             {
-                Health -= collider.GetComponent<Bullet_Basic>().damage;
-                collider.GetComponent<Bullet_Basic>().destroy();
+                lastHit = collider.GetComponent<Bullet_Basic>();
+                Health -= lastHit.damage;
             }
         }
     }

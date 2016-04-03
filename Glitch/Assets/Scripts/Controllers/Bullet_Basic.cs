@@ -1,13 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
+using ExitGames.Client.Photon;
 
 public class Bullet_Basic : MonoBehaviour
 {
-    public PhotonView photonView;
+    PhotonView photonView;
     public int index;
     public int damage;
 
-    public void destroy()
+    public void setPhotonView(PhotonView photonView)
+    {
+        this.photonView = photonView;
+    }
+
+    public void onKill()
+    {
+        photonView.RPC("killConfirmed", PhotonTargets.All);
+        destroyBullet();
+    }
+
+    public void destroyBullet()
     {
         photonView.RPC("destroyBullet", PhotonTargets.All, index);
     }
@@ -15,6 +26,6 @@ public class Bullet_Basic : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.layer == 8)
-            destroy();
+            destroyBullet();
     }
 }

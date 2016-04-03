@@ -1,20 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Glitch;
 
 public class GameController : Photon.PunBehaviour
 {
-
+    UIController UIController;
     GameObject myPlayer;
     GameObject[] spawnLocation;
     GameObject mainCamera;
+ 
 
     // Use this for initialization
     void Start()
     {
-        PhotonNetwork.ConnectUsingSettings("0.1");
         spawnLocation = GameObject.FindGameObjectsWithTag("SpawnLocation");
         mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        UIController = GetComponent<UIController>();
+
+        PhotonNetwork.ConnectUsingSettings("0.1");
     }
 
     public override void OnJoinedLobby()
@@ -49,9 +51,18 @@ public class GameController : Photon.PunBehaviour
 
         myPlayer.GetComponent<RootMotionScript>().enabled = true;
         myPlayer.GetComponent<Rigidbody>().isKinematic = false;
-        myPlayer.GetComponent<PlayerController>().enabled = true;
         myPlayer.GetComponent<PlayerController>().Health = 10;
         myPlayer.GetComponent<PlayerController>().Controller = this;
+    }
+
+    public void addKill()
+    {
+        UIController.AddKill();
+    }
+
+    public void addDeath()
+    {
+        UIController.AddDeath();
     }
 
     void OnGUI()
