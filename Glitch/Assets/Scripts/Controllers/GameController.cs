@@ -7,7 +7,6 @@ public class GameController : Photon.PunBehaviour
     GameObject myPlayer;
     GameObject[] spawnLocation;
     GameObject mainCamera;
- 
 
     // Use this for initialization
     void Start()
@@ -63,6 +62,21 @@ public class GameController : Photon.PunBehaviour
     public void addDeath()
     {
         UIController.AddDeath();
+    }
+
+    public void changeControls(int style)
+    {
+        switch (style)
+        {
+            case 1:
+                myPlayer.GetComponent<RootMotionScript>().controlScheme = 1;
+                break;
+            case 2:
+                myPlayer.GetComponent<RootMotionScript>().controlScheme = 2;
+                break;
+            case 3:
+                break;
+        }
     }
 
     void OnGUI()

@@ -1,4 +1,6 @@
-﻿public class Weapon
+﻿using Glitch;
+
+public class Weapon
 {
     private string name;
     private float fireRate;
@@ -8,6 +10,7 @@
     private int magsRemaining;
     private int roundsRemaining;
     private float damage;
+    private FiringStyle firingStyle;
 
     public string Name
     {
@@ -97,6 +100,19 @@
         set
         {
             damage = value;
+        }
+    }
+
+    public FiringStyle FiringStyle
+    {
+        get
+        {
+            return firingStyle;
+        }
+
+        set
+        {
+            firingStyle = value;
         }
     }
 }
